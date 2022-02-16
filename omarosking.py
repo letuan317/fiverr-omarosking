@@ -5,7 +5,7 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from seleniumwire.utils import decode
 
-from fake_useragent import UserAgent
+#from fake_useragent import UserAgent
 from termcolor import cprint
 import essentials
 import platform
@@ -47,9 +47,9 @@ def CreateSession():
     options.add_argument(
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36")
 
-    ua = UserAgent()
-    userAgent = ua.random
-    options.add_argument(f'user-agent={userAgent}')
+    #ua = UserAgent()
+    #userAgent = ua.random
+    # options.add_argument(f'user-agent={userAgent}')
 
     if platform.system() == "Windows":
         message("warning", "Selenium run on Windows")

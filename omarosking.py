@@ -13,10 +13,13 @@ import sys
 import os
 import brotli
 import json
+import requests
 
 API_LIST = {
     'pokeapi': 'https://pokeapi.co/api/v2/pokemon/1',
-    'dragonballapi': 'https://dragon-ball-api.herokuapp.com/documentation'
+    'dragonballapi': 'https://dragon-ball-api.herokuapp.com/documentation',
+    'test': 'https://postman-echo.com/'
+
 }
 
 
@@ -66,14 +69,37 @@ def CreateSession():
         sys.exit()
 
 
-# TODO POSTRequest
 def POSTRequestAPI(session, url, sessid, arg):
-    return None
+    # TODO POSTRequest
+    cprint("POST REQUEST METHOD", 'green')
+    print(url, arg)
+    res = requests.post(url, data=arg)
+    print(res.text)
 
-# TODO GETRequest
+
+def PUTRequestAPI(session, url, sessid, arg):
+    # TODO PUTRequest
+    cprint("PUT REQUEST METHOD", 'green')
+    res = requests.put(url, data=arg)
+    print(res.text)
+
+
+def PATCHRequestAPI(session, url, sessid, arg):
+    # TODO PATCHRequest
+    cprint("PATCH REQUEST METHOD", 'green')
+    res = requests.patch(url, data=arg)
+    print(res.text)
+
+
+def DELETERequestAPI(session, url, sessid, arg):
+    # TODO DELETERequest
+    cprint("DELETE REQUEST METHOD", 'green')
+    res = requests.delete(url, data=arg)
+    print(res.text)
 
 
 def GETRequestAPI(session, url, sessid, arg):
+    # TODO GETRequest
     session.get(API_LIST['pokeapi'])
     for request in session.requests:
         if request.response:
@@ -94,6 +120,17 @@ def main():
 
     arg = dict()
     GETRequestAPI(s, API_LIST['pokeapi'], '', arg)
+
+    arg = dict()
+    arg['name'] = 'ABC',
+    arg['email'] = 'xyz@gmail.com'
+    POSTRequestAPI(s, API_LIST['test']+'post', '', arg)
+
+    PUTRequestAPI(s, API_LIST['test']+'put', '', arg)
+
+    PATCHRequestAPI(s, API_LIST['test']+'patch', '', 'testing patch')
+
+    DELETERequestAPI(s, API_LIST['test']+'delete', '', 'testing delete')
 
 
 if __name__ == '__main__':

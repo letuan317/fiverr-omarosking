@@ -10,6 +10,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium.webdriver import ActionChains
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support.ui import Select
 
 
 from termcolor import cprint
@@ -60,7 +61,13 @@ class AutoFilling:
 
     def run(self):
         self.OpenBrowser()
-        self.TaskElements()
+        # self.TaskElements()
+        # self.TaskForms()
+        self.TaskAlertsFrameWindows()
+        self.TaskWidgets()
+        self.TaskInteractions()
+        self.TaskBookStoreApplication()
+        input('Continue?')
         self.driver.quit()
 
     # Create a session
@@ -85,7 +92,7 @@ class AutoFilling:
             ser = Service(chrome_path)
             self.driver = webdriver.Chrome(options=options, service=ser)
             self.driver.set_window_position(0, 0)
-            self.driver.set_window_size(1024, 768)
+            self.driver.set_window_size(800, 500)
         except Exception as e:
             message("error", e)
             sys.exit()
@@ -390,16 +397,148 @@ class AutoFilling:
         UploadAndDownload()
         WaitingMode(self.waitingtime)
         DynamicProperties()
+        WaitingMode(self.waitingtime)
 
     def TaskForms(self):
-        def PracticForm(): pass
+        def PracticForm():
+            if self.IsPageLoaded('Practice Form', 'https://demoqa.com/automation-practice-form'):
+                # Full Name
+                self.driver.find_element(
+                    By.XPATH, '//*[@id="firstName"]').send_keys(DATA_info['fname'])
+                self.driver.find_element(
+                    By.XPATH, '//*[@id="lastName"]').send_keys(DATA_info['lname'])
+                message("warning", "[+] PracticeForm full name filled")
+                # Email
+                self.driver.find_element(
+                    By.XPATH, '//*[@id="userEmail"]').send_keys(DATA_info['email'])
+                message("warning", "[+] PracticeForm email filled")
+                # Gender
+                element_gender = self.driver.find_element(
+                    By.XPATH, '//*[@id="gender-radio-1"]')
+                self.driver.execute_script(
+                    "arguments[0].click();", element_gender)
+                message("warning", "[+] PracticeForm gender filled")
+                # Mobile
+                self.driver.find_element(
+                    By.XPATH, '//*[@id="userNumber"]').send_keys("0123456789")
+                message("warning", "[+] PracticeForm mobile filled")
+                # Date of birth
+                self.driver.find_element(
+                    By.XPATH, '//*[@id="dateOfBirthInput"]').send_keys(" ")
+                message("warning", "[+] PracticeForm dateofbirth filled")
+                # Subjects
+                self.driver.find_element(
+                    By.XPATH, '//*[@id="subjectsInput"]').send_keys('math')
+                self.driver.find_element(
+                    By.XPATH, '//*[@id="subjectsInput"]').send_keys(Keys.ENTER)
+                message("warning", "[+] PracticeForm Subjects filled")
+                # Hobbies
+                temp01 = self.driver.find_element(
+                    By.XPATH, '//*[@id="hobbies-checkbox-1"]')
+                self.driver.execute_script(
+                    "arguments[0].click();", temp01)
+                temp02 = self.driver.find_element(
+                    By.XPATH, '//*[@id="hobbies-checkbox-2"]')
+                self.driver.execute_script(
+                    "arguments[0].click();", temp02)
+                temp03 = self.driver.find_element(
+                    By.XPATH, '//*[@id="hobbies-checkbox-3"]')
+                self.driver.execute_script(
+                    "arguments[0].click();", temp03)
+                message("warning", "[+] PracticeForm Hobbies filled ")
+                # Picture
+                self.driver.find_element(
+                    By.XPATH, '//*[@id="uploadPicture"]').send_keys(DATA_info['file_path'])
+                message("warning", "[+] PracticeForm Picture filled ")
+                # Current Address
+                self.driver.find_element(
+                    By.XPATH, '//*[@id="currentAddress"]').send_keys(DATA_info['address'])
+                message("warning", "[+] PracticeForm current address filled ")
+                # TODO Select options from divs
+                # State
+                #select = Select(self.driver.find_element(By.ID, 'state'))
+                #select.select_by_visible_text('Uttar Pradesh')
+                temp = self.driver.find_element(
+                    By.XPATH, '///*[@id="react-select-3-input"]')
+                temp.send_keys('NCR')
+                temp.send_keys(Keys.ENTER)
+                #self.driver.execute_script( "arguments[0].click();", temp)
+                message("warning", "[+] PracticeForm state filled ")
+                # City
+                #select = Select(self.driver.find_element(By.ID, 'city'))
+                # select.select_by_visible_text('Agra')
+                message("warning", "[+] PracticeForm city filled ")
+
+        PracticForm()
 
     def TaskAlertsFrameWindows(self):
-        def BrowserWindows(): pass
-        def Alerts(): pass
+        def BrowserWindows():
+            if self.IsPageLoaded("BrowserWindows", 'https://demoqa.com/browser-windows'):
+                p = self.driver.current_window_handle
+                self.driver.find_element(
+                    By.XPATH, '//*[@id="tabButton"]').click()
+                chwd = self.driver.window_handles
+                for w in chwd:
+                    if(w != p):
+                        self.driver.switch_to.window(w)
+                        break
+                WaitingMode(self.waitingtime)
+                self.driver.close()
+                self.driver.switch_to.window(p)
+                message("warning", "[+] BrowserWindows button01 clicked")
+
+                temp = self.driver.find_element(
+                    By.XPATH, '//*[@id="windowButton"]')
+                self.driver.execute_script(
+                    "arguments[0].click();", temp)
+                chwd = self.driver.window_handles
+                for w in chwd:
+                    if(w != p):
+                        self.driver.switch_to.window(w)
+                        break
+                WaitingMode(self.waitingtime)
+                self.driver.close()
+                self.driver.switch_to.window(p)
+                message("warning", "[+] BrowserWindows button01 clicked")
+
+                temp = self.driver.find_element(
+                    By.XPATH, '//*[@id="messageWindowButton"]')
+                self.driver.execute_script(
+                    "arguments[0].click();", temp)
+                chwd = self.driver.window_handles
+                for w in chwd:
+                    if(w != p):
+                        self.driver.switch_to.window(w)
+                        break
+                WaitingMode(self.waitingtime)
+                self.driver.close()
+                self.driver.switch_to.window(p)
+                message("warning", "[+] BrowserWindows button01 clicked")
+
+        def Alerts():
+            if self.IsPageLoaded("Alerts", 'https://demoqa.com/alerts'):
+                self.driver.find_element(
+                    By.XPATH, '//*[@id="alertButton"]').click()
+                WaitingMode(self.waitingtime)
+                try:
+                    WebDriverWait(self.driver, 3).until(EC.alert_is_present(),
+                                                        'You clicked a button')
+
+                    alert = self.driver.switch_to.alert
+                    alert.accept()
+                    print("alert accepted")
+                except TimeoutException:
+                    print("no alert")
+
         def Frames(): pass
         def NestedFrames(): pass
         def ModalDialogs(): pass
+
+        # BrowserWindows()
+        Alerts()
+        Frames()
+        NestedFrames()
+        ModalDialogs()
 
     def TaskWidgets(self):
         def Accordian(): pass
